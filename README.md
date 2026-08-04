@@ -51,7 +51,7 @@ datasets before reusing this material.
 The pages are produced by a single Python script that loads both datasets through
 Text-Fabric and writes the HTML — no build step or server required.
 
-## Lisence
+## License
 
 This work is licensed under a Attribution-NonCommercial 4.0 International (CC BY-NC 4.0).
 
