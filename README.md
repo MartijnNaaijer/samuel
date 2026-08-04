@@ -8,7 +8,7 @@ manuscripts** of Samuel, for close reading by Hebraists.
 
 The pages are plain static HTML — open **`index.html`**, or visit the published site:
 
-**https://\<your-username>.github.io/\<repo-name>/**
+**https://martijnnaaijer.github.io/samuel
 
 ## What's inside
 
@@ -50,7 +50,3 @@ datasets before reusing this material.
 
 The pages are produced by a single Python script that loads both datasets through
 Text-Fabric and writes the HTML — no build step or server required.
-
-## License
-
-<!-- Choose a license for your own additions (e.g. CC-BY-4.0), and keep the upstream dataset credits above. -->
