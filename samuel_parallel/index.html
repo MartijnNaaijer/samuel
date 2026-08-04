@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samuel — MT ∥ DSS parallel</title><style>
+:root { --rec:#9aa0a6; --illeg:#c3c7cc; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       color:#1f2328; background:#fafafa; }
+.hebrew { font-family:"Frank Ruhl Libre","SBL Hebrew","Ezra SIL","Taamey Frank CLM",
+          "David","Times New Roman",serif; }
+header { position:sticky; top:0; background:#fff; border-bottom:1px solid #e3e3e3;
+         padding:14px 22px; z-index:5; }
+header h1 { margin:0 0 4px; font-size:1.5rem; }
+header .att { color:#556; font-size:.9rem; }
+nav { margin-top:8px; font-size:.9rem; }
+nav a { text-decoration:none; color:#2563eb; margin-right:14px; }
+nav a.disabled { color:#bbb; pointer-events:none; }
+.legend { margin:16px auto; padding:12px 16px; background:#fff; border:1px solid #e3e3e3;
+          border-radius:8px; font-size:.9rem; line-height:1.7; max-width:1000px; }
+.legend b { font-weight:600; }
+.sample { font-size:1.15rem; }
+.chapter { max-width:1000px; margin:0 auto 40px; background:#fff; border:1px solid #ececec;
+           border-radius:8px; }
+.verse { padding:12px 20px 14px; border-bottom:1px solid #eee; }
+.verse:last-child { border-bottom:none; }
+.verse:target { background:#fff7e6; }
+.vhead { font-size:.78rem; color:#8a8f98; text-align:right; margin-bottom:5px;
+         font-variant-numeric:tabular-nums; }
+.line { display:flex; gap:14px; align-items:baseline; padding:2px 0; }
+.badge { flex:0 0 auto; min-width:84px; text-align:center; direction:ltr; unicode-bidi:isolate;
+         font-family:-apple-system,Segoe UI,sans-serif; font-size:.98rem; font-weight:600;
+         letter-spacing:.02em; padding:6px 14px; border-radius:13px; color:#fff;
+         align-self:flex-start; margin-top:.3em; }
+.badge.mt  { background:#111827; }
+.badge.sig { background:#4b5563; }
+.txt { flex:1 1 auto; direction:rtl; text-align:right; }
+.w { position:relative; cursor:help; }
+.w:hover { background:#eaf1ff; border-radius:3px; }
+.tip { display:none; position:fixed; z-index:30; direction:ltr; text-align:left;
+       background:#1f2937; color:#f9fafb; border-radius:10px; padding:9px 13px;
+       box-shadow:0 10px 28px rgba(0,0,0,.24); pointer-events:none; white-space:nowrap;
+       font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       font-size:1rem; line-height:1.5; }
+.tip .row { display:flex; gap:12px; }
+.tip .lbl { color:#9ca3af; min-width:112px; }
+.tip .val { color:#f9fafb; font-weight:500; }
+/* MT vocalization / cantillation slider */
+.voc-cb { position:absolute; opacity:0; width:0; height:0; pointer-events:none; }
+.mtline .cons { display:none; }
+#voc:checked ~ .chapter .mtline .voc { display:none; }
+#voc:checked ~ .chapter .mtline .cons { display:inline; }
+.switch { display:inline-flex; align-items:center; gap:10px; cursor:pointer; margin-top:10px;
+          font-size:.88rem; color:#374151; user-select:none; }
+.switch .track { width:42px; height:24px; background:#cbd5e1; border-radius:999px;
+                 position:relative; transition:background .15s; flex:0 0 auto; }
+.switch .thumb { position:absolute; top:3px; left:3px; width:18px; height:18px; background:#fff;
+                 border-radius:50%; box-shadow:0 1px 3px rgba(0,0,0,.3); transition:transform .15s; }
+#voc:checked ~ header .switch .track { background:#2563eb; }
+#voc:checked ~ header .switch .thumb { transform:translateX(18px); }
+.mtline  .txt { font-size:1.55rem; line-height:1.9; }
+.dssline .txt { font-size:1.5rem;  line-height:1.9; }
+.none { color:#b8bcc2; font-size:.95rem; font-style:italic; padding-inline-start:76px; }
+.rec  { color:var(--rec); }                    /* reconstructed letters */
+.unid { color:var(--illeg); }                  /* illegible letter (traces) */
+.unc  { text-decoration:underline dotted #c0392b; text-underline-offset:5px; }
+footer { color:#8a8f98; font-size:.82rem; padding:0 22px 40px; max-width:1000px; margin:0 auto; }
+
+ul.idx { columns:2; max-width:900px; margin:20px 22px; padding-inline-start:20px; }
+ul.idx li { margin:4px 0; } ul.idx a { text-decoration:none; color:#2563eb; }
+</style></head><body>
+<header><h1>Samuel — Masoretic Text (BHSA) ∥ Dead Sea Scrolls</h1>
+<div class="att">One parallel page per chapter. Scrolls: 4QSamᵃ (4Q51), 4QSamᵇ (4Q52),
+4QSamᶜ (4Q53), 1QSam (1Q7). 54 of 55 chapters have scroll evidence (1 Samuel 13 does not).</div></header>
+<ul class="idx"><li><a href="1Samuel_01.html">1 Samuel 1</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_02.html">1 Samuel 2</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_03.html">1 Samuel 3</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_04.html">1 Samuel 4</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_05.html">1 Samuel 5</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_06.html">1 Samuel 6</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_07.html">1 Samuel 7</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_08.html">1 Samuel 8</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_09.html">1 Samuel 9</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_10.html">1 Samuel 10</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_11.html">1 Samuel 11</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_12.html">1 Samuel 12</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ, 4QSamᵇ</span></li><li><a href="1Samuel_13.html">1 Samuel 13</a><span style="color:#8a8f98;font-size:.85rem"> &middot; <span class="none">MT only</span></span></li><li><a href="1Samuel_14.html">1 Samuel 14</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ, 4QSamᵇ</span></li><li><a href="1Samuel_15.html">1 Samuel 15</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ, 4QSamᵇ</span></li><li><a href="1Samuel_16.html">1 Samuel 16</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵇ</span></li><li><a href="1Samuel_17.html">1 Samuel 17</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_18.html">1 Samuel 18</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 1QSam, 4QSamᵃ</span></li><li><a href="1Samuel_19.html">1 Samuel 19</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵇ</span></li><li><a href="1Samuel_20.html">1 Samuel 20</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ, 4QSamᵇ</span></li><li><a href="1Samuel_21.html">1 Samuel 21</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵇ</span></li><li><a href="1Samuel_22.html">1 Samuel 22</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ, 4QSamᵇ</span></li><li><a href="1Samuel_23.html">1 Samuel 23</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵇ</span></li><li><a href="1Samuel_24.html">1 Samuel 24</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_25.html">1 Samuel 25</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ, 4QSamᶜ</span></li><li><a href="1Samuel_26.html">1 Samuel 26</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_27.html">1 Samuel 27</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_28.html">1 Samuel 28</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_29.html">1 Samuel 29</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_30.html">1 Samuel 30</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="1Samuel_31.html">1 Samuel 31</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_01.html">2 Samuel 1</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_02.html">2 Samuel 2</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_03.html">2 Samuel 3</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_04.html">2 Samuel 4</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_05.html">2 Samuel 5</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_06.html">2 Samuel 6</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_07.html">2 Samuel 7</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_08.html">2 Samuel 8</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_09.html">2 Samuel 9</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_10.html">2 Samuel 10</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_11.html">2 Samuel 11</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_12.html">2 Samuel 12</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_13.html">2 Samuel 13</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_14.html">2 Samuel 14</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ, 4QSamᶜ</span></li><li><a href="2Samuel_15.html">2 Samuel 15</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ, 4QSamᶜ</span></li><li><a href="2Samuel_16.html">2 Samuel 16</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_17.html">2 Samuel 17</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_18.html">2 Samuel 18</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_19.html">2 Samuel 19</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_20.html">2 Samuel 20</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 1QSam, 4QSamᵃ</span></li><li><a href="2Samuel_21.html">2 Samuel 21</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 1QSam, 4QSamᵃ</span></li><li><a href="2Samuel_22.html">2 Samuel 22</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li><li><a href="2Samuel_23.html">2 Samuel 23</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 1QSam, 4QSamᵃ</span></li><li><a href="2Samuel_24.html">2 Samuel 24</a><span style="color:#8a8f98;font-size:.85rem"> &middot; 4QSamᵃ</span></li></ul></body></html>
