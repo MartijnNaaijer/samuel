@@ -64,11 +64,11 @@ BHSA_VERSION = Path(BHSA_TF).name
 
 DSS_FEATURES = (
     "otype oslots scroll book chapter verse glyph type rec unc after "
-    "sp_etcbc nu_etcbc gn_etcbc ps_etcbc vs_etcbc vt_etcbc"
+    "lex_etcbc sp_etcbc nu_etcbc gn_etcbc ps_etcbc vs_etcbc vt_etcbc"
 )
 BHSA_FEATURES = (
     "otype oslots book chapter verse g_word_utf8 g_cons_utf8 trailer_utf8 "
-    "sp vs vt ps gn nu"
+    "lex sp vs vt ps gn nu"
 )
 
 SCROLLS = ["4Q51", "4Q52", "4Q53", "1Q7"]
@@ -80,6 +80,7 @@ CHAPTERS = [("1 Samuel", n) for n in range(1, 32)] + [("2 Samuel", n) for n in r
 
 DOT_ABOVE = "̇"      # combining dot above (escaped: the literal is invisible)
 GLYPH_TYPES = {"cons", "numr", "foreign", "punct", "add"}
+SOF_PASUQ = "׃"      # ׃ verse divider; dropped at the end of a scroll verse
 
 
 def load_corpus(location: str, features: str, what: str):
@@ -108,7 +109,9 @@ def scan_dss():
         def c(x):
             return x if x and x not in ("NA", "unknown") else None
 
-        rows = [("part of speech", c(F.sp_etcbc.v(w)) or "–")]
+        # the lexeme (ETCBC transliteration, as in BHSA: KL/, JD<[) comes first
+        rows = [("lexeme", c(F.lex_etcbc.v(w)) or "–"),
+                ("part of speech", c(F.sp_etcbc.v(w)) or "–")]
         for lbl, v in (("verbal stem", c(F.vs_etcbc.v(w))),
                        ("verbal tense", c(F.vt_etcbc.v(w))),
                        ("person", c(F.ps_etcbc.v(w))),
@@ -138,44 +141,94 @@ def scan_dss():
             return (ch, rec)
         return None
 
+    def trailing_sof_pasuq(vwords):
+        """Sign nodes of the verse-final ׃ (or ׃׃), which we do not print."""
+        drop = set()
+        signs = [s for w in vwords for s in L.d(w, otype="sign")]
+        for s in reversed(signs):
+            t = F.type.v(s)
+            if t in ("empty", "sep", "term"):
+                continue                                  # never rendered anyway
+            if t == "missing":
+                continue                                  # a lost letter after the divider
+            if t == "punct" and (F.glyph.v(s) or "").strip(SOF_PASUQ) == "":
+                drop.add(s)
+                continue                                  # keep going: ׃׃ is two signs
+            break                                         # real text: stop here
+        return drop
+
     def verse_html(vwords):
-        # Each word is wrapped in a hoverable span carrying its morphology.
-        # Reconstruction brackets [ ] are emitted as plain TEXT at the boundaries
-        # of a maximal reconstructed run (so a lacuna spanning several words is
-        # bracketed once), while the grey colouring is applied per word (a <span
-        # class="rec"> never crosses a word boundary -> always valid nesting).
-        parts, inrec, grey = [], False, False
+        # Two passes.  The first renders every sign to a (chunk, reconstructed) pair,
+        # leaving out the verse-final sof pasuq.  The second works out the maximal
+        # runs of reconstructed material so that, in a run covering three or more
+        # words, the words in the middle can be hidden while still taking up their
+        # space, leaving only the first and last word of the lacuna legible.
+        drop = trailing_sof_pasuq(vwords)
 
-        def open_grey():
-            nonlocal grey
-            if not grey:
-                parts.append('<span class="rec">'); grey = True
-
-        def close_grey():
-            nonlocal grey
-            if grey:
-                parts.append("</span>"); grey = False
-
+        wchunks = []                          # per word: [[chunk, rec, hidden], ...]
         for w in vwords:
-            parts.append('<span class="w">')
+            row = []
             for s in L.d(w, otype="sign"):
+                if s in drop:
+                    continue
                 info = sign_info(s)
                 if info is None:
                     continue
                 chunk, rec = info
+                row.append([chunk, rec, False])
+            wchunks.append(row)
+
+        runs, run = [], []                    # maximal reconstructed runs, across words
+        for wi, row in enumerate(wchunks):
+            for ci, (_, rec, _) in enumerate(row):
+                if rec:
+                    run.append((wi, ci))
+                elif run:
+                    runs.append(run)
+                    run = []
+        if run:
+            runs.append(run)
+
+        for run in runs:
+            touched = sorted({wi for wi, _ in run})
+            if len(touched) >= 3:             # hide everything but first and last word
+                middle = set(touched[1:-1])
+                for wi, ci in run:
+                    if wi in middle:
+                        wchunks[wi][ci][2] = True
+
+        # Reconstruction brackets [ ] are emitted as plain TEXT at the boundaries of a
+        # run (so a lacuna spanning several words is bracketed once), while the grey
+        # colouring is applied per word: a <span class="rec"> never crosses a word
+        # boundary, so nesting with the per-word hover span is always valid.
+        parts, inrec, open_span = [], False, None
+
+        def close():
+            nonlocal open_span
+            if open_span:
+                parts.append("</span>")
+                open_span = None
+
+        for wi, w in enumerate(vwords):
+            row = wchunks[wi]
+            blank = bool(row) and all(c[2] for c in row)   # nothing of it is legible
+            parts.append('<span class="w blank">' if blank else '<span class="w">')
+            for chunk, rec, hidden in row:
                 if rec and not inrec:
-                    parts.append("["); inrec = True          # open lacuna (text)
+                    close(); parts.append("["); inrec = True           # open lacuna
                 elif (not rec) and inrec:
-                    close_grey(); parts.append("]"); inrec = False   # close lacuna (text)
-                if rec and not grey:
-                    open_grey()
-                elif (not rec) and grey:
-                    close_grey()
+                    close(); parts.append("]"); inrec = False          # close lacuna
+                want = ("rec mid" if hidden else "rec") if rec else None
+                if want != open_span:
+                    close()
+                    if want:
+                        parts.append(f'<span class="{want}">')
+                        open_span = want
                 parts.append(chunk)
-            close_grey()                                     # word boundary (run may continue)
+            close()                                        # word boundary
             parts.append(tip_dss(w))
             parts.append("</span>")
-            aft = F.after.v(w)                               # ' ' divider or None (connected)
+            aft = F.after.v(w)                             # ' ' divider or None
             if aft:
                 parts.append(aft)
         if inrec:
@@ -235,6 +288,10 @@ nav a.disabled { color:#bbb; pointer-events:none; }
 .legend { margin:16px auto; padding:12px 16px; background:#fff; border:1px solid #e3e3e3;
           border-radius:8px; font-size:.9rem; line-height:1.7; max-width:1000px; }
 .legend b { font-weight:600; }
+.legend .hd { font-weight:600; }
+.legend ul { list-style:none; margin:6px 0 0; padding:0; }
+.legend li { padding:2px 0 2px 14px; text-indent:-14px; }
+.legend .key { font-weight:600; }
 .sample { font-size:1.15rem; }
 .chapter { max-width:1000px; margin:0 auto 40px; background:#fff; border:1px solid #ececec;
            border-radius:8px; }
@@ -278,25 +335,36 @@ nav a.disabled { color:#bbb; pointer-events:none; }
 .dssline .txt { font-size:1.5rem;  line-height:1.9; }
 .none { color:#b8bcc2; font-size:.95rem; font-style:italic; padding-inline-start:76px; }
 .rec  { color:var(--rec); }                    /* reconstructed letters */
+.rec.mid { visibility:hidden; }                /* inside a long lacuna: keeps its width */
+.blank:hover { background:none; cursor:default; }
 .unid { color:var(--illeg); }                  /* illegible letter (traces) */
 .unc  { text-decoration:underline dotted #c0392b; text-underline-offset:5px; }
 footer { color:#8a8f98; font-size:.82rem; padding:0 22px 40px; max-width:1000px; margin:0 auto; }
 """
 
 LEGEND = (
-    '<div class="legend"><b>Reading the scroll lines</b> (ETCBC/DSS transcription, consonantal). '
-    'Black&nbsp;= letters preserved on the manuscript; '
-    '<span class="hebrew sample rec">[&#8202;grey / in brackets&#8202;]</span>&nbsp;= editorially '
-    '<b>reconstructed</b>; '
-    '<span class="hebrew sample">א' + DOT_ABOVE + '</span>&nbsp;(dotted underline)&nbsp;= an '
-    'identified but <b>uncertain</b> reading; '
-    '<span class="hebrew sample unid">°</span>&nbsp;= a letter present only as illegible traces; '
-    '<span class="hebrew sample">.</span>&nbsp;= a lost letter inside a lacuna. '
-    'Each verse shows the <span class="badge mt" style="margin:0">MT</span> (pointed BHSA text) on '
-    'top and the scroll line(s) beneath it, keyed by siglum, for direct comparison. '
-    '<b>Hover over any word</b> to see its part of speech, verbal stem &amp; tense (for verbs), '
-    'person, gender and number. The slider above switches the MT between full pointing and '
-    'consonants only.</div>'
+    '<div class="legend">'
+    '<div class="hd">Reading the scroll lines</div>'
+    '<ul>'
+    '<li>ETCBC/DSS transcription, consonantal.</li>'
+    '<li><span class="key">Black</span> &ndash; letters preserved on the manuscript.</li>'
+    '<li><span class="hebrew sample rec">[&#8202;grey / in brackets&#8202;]</span> &ndash; '
+    'editorially <b>reconstructed</b>. In a lacuna running over three or more words only the '
+    'first and the last word are shown; the words between them are left blank but keep their '
+    'width, so the size of the gap stays visible.</li>'
+    '<li><span class="hebrew sample">א' + DOT_ABOVE + '</span> (dotted underline) &ndash; an '
+    'identified but <b>uncertain</b> reading.</li>'
+    '<li><span class="hebrew sample unid">°</span> &ndash; a letter present only as illegible '
+    'traces.</li>'
+    '<li><span class="hebrew sample">.</span> &ndash; a lost letter inside a lacuna.</li>'
+    '<li>The verse-final <span class="hebrew sample">׃</span> is not printed in the scroll '
+    'lines.</li>'
+    '<li>Each verse shows the <span class="badge mt" style="margin:0">MT</span> (pointed BHSA '
+    'text) on top and the scroll line(s) beneath it, keyed by siglum, for direct comparison.</li>'
+    '<li><b>Hover over any word</b> to see its lexeme (in ETCBC transliteration), part of '
+    'speech, verbal stem &amp; tense (for verbs), person, gender and number.</li>'
+    '<li>The slider above switches the MT between full pointing and consonants only.</li>'
+    '</ul></div>'
 )
 
 
@@ -407,7 +475,8 @@ def build(chap_scrolls, verse_scrolls, dss_html):
         def c(x):
             return x if x and x not in ("NA", "unknown") else None
 
-        rows = [("part of speech", c(F.sp.v(w)) or "–")]
+        rows = [("lexeme", c(F.lex.v(w)) or "–"),
+                ("part of speech", c(F.sp.v(w)) or "–")]
         for lbl, v in (("verbal stem", c(F.vs.v(w))),
                        ("verbal tense", c(F.vt.v(w))),
                        ("person", c(F.ps.v(w))),
