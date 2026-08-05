@@ -39,17 +39,42 @@ The four scrolls attest 54 of Samuel's 55 chapters; only 1 Samuel 13 has no scro
 
 ## Sources & credits
 
-- **Masoretic Text:** the ETCBC [BHSA](https://github.com/ETCBC/bhsa) Text-Fabric dataset (version 2021).
-- **Dead Sea Scrolls:** the ETCBC [dss](https://github.com/ETCBC/dss) Text-Fabric dataset (Martin Abegg's transcription).
-- Generated with [Text-Fabric](https://github.com/annotation/text-fabric).
+- **Masoretic Text:** the ETCBC [BHSA](https://github.com/ETCBC/bhsa) dataset (version 2021).
+- **Dead Sea Scrolls:** the ETCBC [dss](https://github.com/ETCBC/dss) dataset, version 2.0 (Martin Abegg's transcription).
+- Both are distributed in Text-Fabric (`.tf`) format and are read here with
+  [Context-Fabric](https://context-fabric.ai), the successor to
+  [Text-Fabric](https://github.com/annotation/text-fabric).
 
 Please consult and respect the license and attribution terms of the BHSA and DSS
 datasets before reusing this material.
 
 ## How it was made
 
-The pages are produced by a single Python script that loads both datasets through
-Text-Fabric and writes the HTML — no build step or server required.
+The pages are produced by a single Python script, `src/mt_samuel_for_scroll_chapters.py`,
+that loads both datasets through Context-Fabric and writes the HTML directly into
+`docs/` — no build step, no server, no templates.
+
+To reproduce them you need the two datasets on disk. Context-Fabric does not download
+corpora, so clone them and point the script at the `.tf` directories:
+
+```bash
+pip install context-fabric
+
+git clone --depth 1 https://github.com/ETCBC/dss.git
+git clone --depth 1 https://github.com/ETCBC/bhsa.git
+
+DSS_TF=dss/tf/2.0 BHSA_TF=bhsa/tf/2021 python src/mt_samuel_for_scroll_chapters.py
+```
+
+Both variables default to the usual `~/text-fabric-data` cache, so if the datasets are
+already there the script can be run with no arguments at all. The first run compiles
+each corpus to Context-Fabric's memory-mapped format — a few minutes for the DSS —
+and every run after that loads in about a second.
+
+Alongside the HTML the script writes `mt_samuel_for_scroll_chapters.csv`: one row per
+MT verse of the chapters with scroll evidence (1,483 verses, of which 733 are
+preserved in at least one scroll), with the consonantal and pointed text and the
+sigla attesting it.
 
 ## License
 
