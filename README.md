@@ -6,9 +6,14 @@ manuscripts** of Samuel, for close reading by Hebraists.
 
 ## View it online
 
-The pages are plain static HTML — open **`index.html`**, or visit the published site:
+Visit the published site:
 
 https://martijnnaaijer.github.io/samuel
+
+The pages are static HTML with no build step and no JavaScript dependencies, so
+**`docs/index.html`** can also be opened straight from disk. The one thing they do
+fetch over the network is the Hebrew webfont (Frank Ruhl Libre, from Google Fonts);
+offline they fall back to whatever Hebrew serif font is installed locally.
 
 ## What's inside
 
@@ -21,8 +26,9 @@ reading(s) directly beneath it.
   - a dot above a letter — an uncertain reading
   - `°` — a letter preserved only as illegible traces
   - `.` — a lost letter inside a lacuna
-- **Hover over any word** to see its morphology: part of speech, verbal stem and
-  tense (for verbs), person, gender, and number.
+- **Hover over any word** to see its lexeme — in ETCBC transliteration, so that the
+  Masoretic and scroll lines can be compared in one notation — and its morphology:
+  part of speech, verbal stem and tense (for verbs), person, gender, and number.
 - **Vocalization slider** — switch the Masoretic Text between full pointing /
   cantillation and consonants only.
 
