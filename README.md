@@ -10,7 +10,8 @@ Visit the published site:
 
 https://martijnnaaijer.github.io/samuel
 
-The pages are static HTML with no build step and no JavaScript dependencies, so
+The pages are static HTML with no build step and no external libraries — the only
+script is a few lines inline, which position the hover cards — so
 **`docs/index.html`** can also be opened straight from disk. The one thing they do
 fetch over the network is the Hebrew webfont (Frank Ruhl Libre, from Google Fonts);
 offline they fall back to whatever Hebrew serif font is installed locally.
@@ -64,7 +65,7 @@ To reproduce them you need the two datasets on disk. Context-Fabric does not dow
 corpora, so clone them and point the script at the `.tf` directories:
 
 ```bash
-pip install context-fabric
+pip install -r requirements.txt        # Context-Fabric; the rest is the stdlib
 
 git clone --depth 1 https://github.com/ETCBC/dss.git
 git clone --depth 1 https://github.com/ETCBC/bhsa.git

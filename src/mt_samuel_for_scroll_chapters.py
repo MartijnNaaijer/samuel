@@ -137,7 +137,7 @@ def scan_dss():
         if g and t in GLYPH_TYPES:
             ch = H.escape(g)
             if F.unc.v(s):                                # identified but uncertain
-                ch = '<span class="unc">' + ch + DOT_ABOVE + "</span>"
+                ch = ch + DOT_ABOVE
             return (ch, rec)
         return None
 
@@ -298,7 +298,7 @@ nav a.disabled { color:#bbb; pointer-events:none; }
 .verse { padding:12px 20px 14px; border-bottom:1px solid #eee; }
 .verse:last-child { border-bottom:none; }
 .verse:target { background:#fff7e6; }
-.vhead { font-size:.78rem; color:#8a8f98; text-align:right; margin-bottom:5px;
+.vhead { font-size:1rem; font-weight:600; color:#6b7280; text-align:right; margin-bottom:7px;
          font-variant-numeric:tabular-nums; }
 .line { display:flex; gap:14px; align-items:baseline; padding:2px 0; }
 .badge { flex:0 0 auto; min-width:84px; text-align:center; direction:ltr; unicode-bidi:isolate;
@@ -338,7 +338,6 @@ nav a.disabled { color:#bbb; pointer-events:none; }
 .rec.mid { visibility:hidden; }                /* inside a long lacuna: keeps its width */
 .blank:hover { background:none; cursor:default; }
 .unid { color:var(--illeg); }                  /* illegible letter (traces) */
-.unc  { text-decoration:underline dotted #c0392b; text-underline-offset:5px; }
 footer { color:#8a8f98; font-size:.82rem; padding:0 22px 40px; max-width:1000px; margin:0 auto; }
 """
 
@@ -352,7 +351,7 @@ LEGEND = (
     'editorially <b>reconstructed</b>. In a lacuna running over three or more words only the '
     'first and the last word are shown; the words between them are left blank but keep their '
     'width, so the size of the gap stays visible.</li>'
-    '<li><span class="hebrew sample">א' + DOT_ABOVE + '</span> (dotted underline) &ndash; an '
+    '<li><span class="hebrew sample">א' + DOT_ABOVE + '</span> (dot above the letter) &ndash; an '
     'identified but <b>uncertain</b> reading.</li>'
     '<li><span class="hebrew sample unid">°</span> &ndash; a letter present only as illegible '
     'traces.</li>'
